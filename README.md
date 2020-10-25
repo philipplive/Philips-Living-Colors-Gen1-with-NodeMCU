@@ -1,9 +1,11 @@
 # Philips Living Colors (Gen 1) mit NodeMCU + CC2500 steuern
 
 ### Protokol
+Die gesendeten Blöcke sind immer 15 Bit lang
+
 | Bit  | Beschreibung |
 | ------ | --------- |
-| 1  | Start (immer 0x0E / 14)  |
+| 1  | Immer 0x0E / 14 (nachfolgende Paketgrösse?) |
 | 2  | Adresse  |
 | 3  | Adresse  |
 | 4  | Adresse  |
@@ -22,6 +24,7 @@
 Befehle: 
 | Wert  | Befehl |
 | ------ | --------- |
+| 0x01 | Unbekannt |
 | 0x03 | HSV Wert setzen |
 | 0x05 | Lampe einschalten |
 | 0x07 | Lampe ausschalten |
