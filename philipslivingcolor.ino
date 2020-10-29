@@ -6,7 +6,7 @@ PhilipsLampLib plc;
 void setup() {
   Serial.begin(115200);
   delay(1000);
-  Serial.println("OK");
+  Serial.println("OK2");
   plc.setSerial(&Serial);
 }
 

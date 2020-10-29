@@ -1,7 +1,7 @@
 # Philips Living Colors (Gen 1) mit NodeMCU + CC2500 steuern
 
 ### Protokol
-Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig sind
+Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig scheinen
 
 | Byte  | Beschreibung |
 | ------ | --------- |
@@ -20,6 +20,8 @@ Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig si
 | 13  | Wert H  |
 | 14  | Wert S  |
 | 15  | Wert V  |
+
+* Die Adresse ist offenbar 8 Byte lang
 
 Befehle: 
 | Wert  | Befehl |

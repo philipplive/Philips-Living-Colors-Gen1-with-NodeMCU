@@ -17,108 +17,108 @@ PhilipsLampLib::PhilipsLampLib() {
   // reset device (0x30)
   reset();
 
-  //FSCTRL1 – Frequency Synthesizer Control
+  // FSCTRL1 – Frequency Synthesizer Control
   sendCommand(0x0B, 0x09);
 
-  //FSCTRL0 – Frequency Synthesizer Control
+  // FSCTRL0 – Frequency Synthesizer Control
   sendCommand(0x0C, 0x00);
 
-  //FREQ2 – Frequency Control Word, High Byte
+  // FREQ2 – Frequency Control Word, High Byte
   sendCommand(0x0D, 0x5D);
 
-  //FREQ1 – Frequency Control Word, Middle Byte
+  // FREQ1 – Frequency Control Word, Middle Byte
   sendCommand(0x0E, 0x93);
 
-  //FREQ0 – Frequency Control Word, Low Byte
+  // FREQ0 – Frequency Control Word, Low Byte
   sendCommand(0x0F, 0xB1);
 
-  //MDMCFG4 – Modem Configuration
+  // MDMCFG4 – Modem Configuration
   sendCommand(0x10, 0x2D);
 
-  //MDMCFG3 – Modem Configuration
+  // MDMCFG3 – Modem Configuration
   sendCommand(0x11, 0x3B);
 
-  //MDMCFG2 – Modem Configuration
+  // MDMCFG2 – Modem Configuration
   sendCommand(0x12, 0x73);
 
-  //MDMCFG1 – Modem Configuration
+  // MDMCFG1 – Modem Configuration
   sendCommand(0x13, 0x22);
 
-  //MDMCFG0 – Modem Configuration
+  // MDMCFG0 – Modem Configuration
   sendCommand(0x14, 0xF8);
 
-  //CHANNR – Channel Number
+  // CHANNR – Channel Number
   sendCommand(0x0A, 0x03);
 
-  //DEVIATN – Modem Deviation Setting
+  // DEVIATN – Modem Deviation Setting
   sendCommand(0x15, 0x00);
 
-  //FREND1 – Front End RX Configuration
+  // FREND1 – Front End RX Configuration
   sendCommand(0x21, 0xB6);
 
-  //FREND0 – Front End TX configuration
+  // FREND0 – Front End TX configuration
   sendCommand(0x22, 0x10);
 
-  //MCSM0 – Main Radio Control State Machine
+  // MCSM0 – Main Radio Control State Machine
   // Configuration
   sendCommand(0x18, 0x18);
 
-  //FOCCFG – Frequency Offset Compensation
+  // FOCCFG – Frequency Offset Compensation
   // Configuration
   sendCommand(0x19, 0x1D);
 
-  //BSCFG – Bit Synchronization Configuration
+  // BSCFG – Bit Synchronization Configuration
   sendCommand(0x1A, 0x1C);
 
-  //AGCCTRL2 – AGC Control
+  // AGCCTRL2 – AGC Control
   sendCommand(0x1B, 0xC7);
 
-  //AGCCTRL1 – AGC Control
+  // AGCCTRL1 – AGC Control
   sendCommand(0x1C, 0x00);
 
-  //AGCCTRL0 – AGC Control
+  // AGCCTRL0 – AGC Control
   sendCommand(0x1D, 0xB2);
 
-  //FSCAL3 – Frequency Synthesizer Calibration
+  // FSCAL3 – Frequency Synthesizer Calibration
   sendCommand(0x23, 0xEA);
 
-  //FSCAL2 – Frequency Synthesizer Calibration
+  // FSCAL2 – Frequency Synthesizer Calibration
   sendCommand(0x24, 0x0A);
 
-  //FSCAL1 – Frequency Synthesizer Calibration
+  // FSCAL1 – Frequency Synthesizer Calibration
   sendCommand(0x25, 0x00);
 
-  //FSCAL0 – Frequency Synthesizer Calibration
+  // FSCAL0 – Frequency Synthesizer Calibration
   sendCommand(0x26, 0x11);
 
-  //TEST2 – Various Test Settings
+  // TEST2 – Various Test Settings
   sendCommand(0x2C, 0x88);
 
-  //TEST1 – Various Test Settings
+  // TEST1 – Various Test Settings
   sendCommand(0x2D, 0x31);
 
-  //TEST0 – Various Test Settings
+  // TEST0 – Various Test Settings
   sendCommand(0x2E, 0x0B);
 
-  //IOCFG2 – GDO2 Output Pin Configuration
+  // IOCFG2 – GDO2 Output Pin Configuration
   sendCommand(0x00, 0x06);
 
-  //IOCFG0 – GDO0 Output Pin Configuration
+  // IOCFG0 – GDO0 Output Pin Configuration
   sendCommand(0x01, 0x01);
 
-  //PKTCTRL1 – Packet Automation Control
+  // PKTCTRL1 – Packet Automation Control
   sendCommand(0x07, 0x04);
 
-  //PKTCTRL0 – Packet Automation Control
+  // PKTCTRL0 – Packet Automation Control
   sendCommand(0x08, 0x45);
 
-  //ADDR – Device Address
+  // ADDR – Device Address
   sendCommand(0x09, 0x00);
 
-  //PKTLEN – Packet Length
+  // PKTLEN – Packet Length
   sendCommand(0x06, 0xFF);
 
-  //FIFOTHR – RX FIFO and TX FIFO Thresholds
+  // FIFOTHR – RX FIFO and TX FIFO Thresholds
   sendCommand(0x03, 0x0D);
 
   // PATABLE - Output Power Programming
@@ -157,61 +157,34 @@ void PhilipsLampLib::scanLamps() {
   }
 
   // Einige Durchläufe lang versuchen
- for (int i = 0; i < 30; ++i) {
+  for (int i = 0; i < 30; ++i) {
     // SRX: enable RX
     sendStrobe(0x34);
 
     // Kurz warten, bis RX gefüllt wird (falls jemand sendet)
     delay(100);
 
-    // Anzahl Bytes im RX (17)
+    // Anzahl Bytes im RX (sollten 17 sein)
     result = sendCommand(0xFB, 0x00);
 
     if (result >= 17) {
-      Serial.print("-");
-      Serial.println(result);
+      debug(result);
 
-      // Erstes Byte lesen aus RX FIFO
-      result = sendCommand(0xBF, 0x00);
+      unsigned char data[17];
 
-      Serial.print("--");
-      Serial.println(result);
+      // Gesamtes Restpaket auslesen
+      sendBurstCommand(0xFF, data, 17);
 
-      // Paketstart immer mit 0x0E (14)
-      if (result == 0x0E) {
-        unsigned char data[16];
-
-        // Gesamtes Restpaket auslesen
-        sendBurstCommand(0xFF, data, result);
-
-        for (int i = 0; i < 16; ++i) {
-          Serial.print("---");
-          Serial.print(i);
-          Serial.print("-");
-          Serial.print(data[i]);
-          if (i == 8) Serial.print("(fix)");
-          if (i == 9) Serial.print("(cmd)");
-          if (i == 10) Serial.print("(ink)");
-
-          if (i == 13) Serial.print("(v)");
-          Serial.println("");
-        }
+      // Paket auf Gültigkeit überprüfen
+      if (data[0] == 14 && data[9] == 17 && (data[10] == 3 || data[10] == 5 || data[10] == 7)) {
+        debugLn("Paket OK");
       } else {
-        // Falsche Pakete verwerfen
-        // Restlänge auslesen
-        result = sendCommand(0xFB, 0x00);
-
-        for (int i = 0; i < result; ++i) {
-          // Einzelnes Byte RX FIFO auslesen
-          sendCommand(0xBF, 0x00);
-        }
+        debugLn("Paket ungültig");
       }
     }
 
     // SIDLE
     sendStrobe(CC2500_CMD_SIDLE);
-
-    delay(2);
   }
 
   // SIDLE
@@ -319,4 +292,12 @@ unsigned char PhilipsLampLib::sendByte(unsigned char data) {
   digitalWrite(SPI_CS, HIGH);
 
   return result;
+};
+
+void PhilipsLampLib::debug(unsigned char data) {
+  if (_serial) _serial->print(data);
+};
+
+void PhilipsLampLib::debugLn(const char* data) {
+  if (_serial) _serial->println(data);
 };

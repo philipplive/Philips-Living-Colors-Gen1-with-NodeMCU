@@ -7,6 +7,7 @@
 class PhilipsLampLib {
  private:
   Stream *_serial;
+  unsigned char lamps[10][8];
 
  protected:
   unsigned char counter;
@@ -22,4 +23,6 @@ class PhilipsLampLib {
   unsigned char sendBurstCommand(unsigned char command, unsigned char *data,
                                  unsigned char length);
   unsigned char sendByte(unsigned char data);
-}; 
+  void debug(unsigned char data);
+  void debugLn(const char *data);
+};
