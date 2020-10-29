@@ -1,5 +1,6 @@
 #include "PhilipsLampLib.h"
 
+// Referenz zu einem Stream für Debug
 void PhilipsLampLib::setSerial(Stream* serial) { _serial = serial; }
 
 PhilipsLampLib::PhilipsLampLib() {
@@ -167,7 +168,7 @@ void PhilipsLampLib::scanLamps() {
     result = sendCommand(0xFB, 0x00);
 
     if (result >= 17) {
-       Serial.print("-");
+      Serial.print("-");
       Serial.println(result);
 
       // Erstes Byte lesen aus RX FIFO

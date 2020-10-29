@@ -22,4 +22,4 @@ class PhilipsLampLib {
   unsigned char sendBurstCommand(unsigned char command, unsigned char *data,
                                  unsigned char length);
   unsigned char sendByte(unsigned char data);
-};
+}; 
