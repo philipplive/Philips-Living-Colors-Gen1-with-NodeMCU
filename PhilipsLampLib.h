@@ -5,10 +5,16 @@
 #define SPI_CS 15
 #define MAX_LAMPS 10
 
+#define CMD_SET_COLOR 3
+#define CMD_ON 5
+#define CMD_OFF 7
+
 class PhilipsLampLib {
  private:
   Stream *_serial;
-  unsigned char lamps[MAX_LAMPS][8]; // Lampenadressen (je 8 Byte)
+  unsigned char lamps[MAX_LAMPS][8];  // Lampenadressen (je 8 Byte)
+  void debug(unsigned char data);
+  void debugLn(const char *data);
 
  protected:
   unsigned char counter;
@@ -17,14 +23,18 @@ class PhilipsLampLib {
   PhilipsLampLib();
   void setSerial(Stream *serial);
   void reset();
-  void scanLamps();
-  void setLamps();
-  void addLamp(unsigned char* address);
+
+  /**
+      Suche X-Sekunden nach Sendersignalen und speichere die Empfangsadressen
+      @param duration Anzahl Durchläufe (je 100ms)
+  */
+  void searchLamps(unsigned char duration = 50);
+  void setLamps(unsigned char cmd, unsigned char h = 0, unsigned char s = 0,
+                unsigned char v = 0);
+  void addLamp(unsigned char *address);
   void sendStrobe(byte strobe);
   unsigned char sendCommand(unsigned char command, unsigned char data);
   unsigned char sendBurstCommand(unsigned char command, unsigned char *data,
                                  unsigned char length);
   unsigned char sendByte(unsigned char data);
-  void debug(unsigned char data);
-  void debugLn(const char *data);
 };

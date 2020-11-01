@@ -142,7 +142,7 @@ void PhilipsLampLib::reset() {
   digitalWrite(SPI_CS, HIGH);
 }
 
-void PhilipsLampLib::scanLamps() {
+void PhilipsLampLib::searchLamps(unsigned char duration) {
   unsigned char result = 0;
 
   // SIDLE
@@ -157,7 +157,7 @@ void PhilipsLampLib::scanLamps() {
   }
 
   // Einige Durchläufe lang versuchen
-  for (int i = 0; i < 30; ++i) {
+  for (int i = 0; i < duration; ++i) {
     // SRX: enable RX
     sendStrobe(0x34);
 
@@ -180,7 +180,7 @@ void PhilipsLampLib::scanLamps() {
 
         addLamp(data + 1);
       } else {
-        // debugLn("Paket ungültig");
+        debugLn("Paket ungültig");
       }
     }
 
@@ -247,44 +247,49 @@ void PhilipsLampLib::addLamp(unsigned char* address) {
   // Hier angekommen? Keine Platz mehr für neue Adressen!
 }
 
-void PhilipsLampLib::setLamps() {
-  // Warte bis fertig gesendet und bereit
-  while ((sendByte(0xF5) & 0x1F) > 1) {
-  };
+void PhilipsLampLib::setLamps(unsigned char cmd, unsigned char h,
+                              unsigned char s, unsigned char v) {
+  for (int l = 0; l < MAX_LAMPS; l++) {
+    if (lamps[l][0] == 0) continue;
 
-  unsigned char data[15];
+    while ((sendByte(0xF5) & 0x1F) > 1) {
+    };
 
-  data[0] = 0x0E;  // Paketlänge
+    unsigned char data[15];
 
-  data[1] = 208;
-  data[2] = 152;
-  data[3] = 119;
-  data[4] = 152;
-  data[5] = 195;
-  data[6] = 64;
-  data[7] = 213;
-  data[8] = 180;
-  data[9] = 17;
+    data[0] = 0x0E;  // Paketlänge
 
-  // CMD 0x07 = off,  0x05 = on, 0x03 = hsv
-  data[10] = 0x03;
+    data[1] = lamps[l][0];
+    data[2] = lamps[l][1];
+    data[3] = lamps[l][2];
+    data[4] = lamps[l][3];
+    data[5] = lamps[l][4];
+    data[6] = lamps[l][5];
+    data[7] = lamps[l][6];
+    data[8] = lamps[l][7];
 
-  // Counter
-  data[11] = counter++;
+    data[9] = 17;
 
-  // HSV
-  data[12] = random(0, 255);
-  data[13] = random(0, 255);
-  data[14] = random(0, 255);
+    data[10] = 0x03;
 
-  // SIDLE
-  sendStrobe(CC2500_CMD_SIDLE);
+    // Counter
+    data[11] = counter++;
 
-  // Fülle TX FIFO
-  sendBurstCommand(0x7F, data, 15);
+    // HSV
+    data[12] = random(0, 255);
+    data[13] = random(0, 255);
+    data[14] = random(0, 255);
 
-  // STX: enable TX
-  sendStrobe(0x35);
+    // SIDLE
+    sendStrobe(CC2500_CMD_SIDLE);
+
+    // Fülle TX FIFO
+    sendBurstCommand(0x7F, data, 15);
+
+    // STX: enable TX
+    sendStrobe(0x35);
+    delay(100);
+  }
 };
 
 void PhilipsLampLib::sendStrobe(byte strobe) {
