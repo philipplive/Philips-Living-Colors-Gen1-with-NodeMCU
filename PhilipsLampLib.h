@@ -3,11 +3,12 @@
 
 #define CC2500_CMD_SIDLE 0x36  // Exit RX / TX, turn off frequency synthesizer
 #define SPI_CS 15
+#define MAX_LAMPS 10
 
 class PhilipsLampLib {
  private:
   Stream *_serial;
-  unsigned char lamps[10][8];
+  unsigned char lamps[MAX_LAMPS][8]; // Lampenadressen (je 8 Byte)
 
  protected:
   unsigned char counter;
@@ -18,6 +19,7 @@ class PhilipsLampLib {
   void reset();
   void scanLamps();
   void setLamps();
+  void addLamp(unsigned char* address);
   void sendStrobe(byte strobe);
   unsigned char sendCommand(unsigned char command, unsigned char data);
   unsigned char sendBurstCommand(unsigned char command, unsigned char *data,

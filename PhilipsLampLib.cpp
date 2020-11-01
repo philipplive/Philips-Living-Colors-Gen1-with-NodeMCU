@@ -168,18 +168,19 @@ void PhilipsLampLib::scanLamps() {
     result = sendCommand(0xFB, 0x00);
 
     if (result >= 17) {
-      debug(result);
-
       unsigned char data[17];
 
       // Gesamtes Restpaket auslesen
       sendBurstCommand(0xFF, data, 17);
 
       // Paket auf Gültigkeit überprüfen
-      if (data[0] == 14 && data[9] == 17 && (data[10] == 3 || data[10] == 5 || data[10] == 7)) {
+      if (data[0] == 14 && data[9] == 17 &&
+          (data[10] == 3 || data[10] == 5 || data[10] == 7)) {
         debugLn("Paket OK");
+
+        addLamp(data + 1);
       } else {
-        debugLn("Paket ungültig");
+        // debugLn("Paket ungültig");
       }
     }
 
@@ -199,10 +200,55 @@ void PhilipsLampLib::scanLamps() {
   }
 };
 
-unsigned char count;
+void PhilipsLampLib::addLamp(unsigned char* address) {
+  Serial.println("Suche Adresse:");
+
+  for (int i = 0; i < 8; i++) {
+    Serial.print(address[i]);
+    Serial.print(" ");
+  }
+
+  Serial.println("Vorhandene Adressen:");
+  for (int l = 0; l < MAX_LAMPS; l++) {
+    for (int i = 0; i < 8; i++) {
+      Serial.print(lamps[l][i]);
+      Serial.print(" ");
+    }
+    Serial.println("");
+  }
+
+  // Prüfe ob Adresse schon vorhanden
+  bool exist = true;
+
+  for (int l = 0; l < MAX_LAMPS; l++) {
+    if (lamps[l][0] == 0) continue;
+
+    bool exist = true;
+
+    for (int i = 0; i < 8; i++) {
+      if (lamps[l][i] != address[i]) exist = false;
+    }
+
+    if (exist) return;
+  }
+
+  // Füge Adresse hinzu
+  for (int l = 0; l < MAX_LAMPS; l++) {
+    // Leeres Adressfeld suchen und hier einfügen
+    if (lamps[l][0] == 0) {
+      for (int i = 0; i < 8; i++) {
+        lamps[l][i] = address[i];
+      }
+
+      return;
+    }
+  }
+
+  // Hier angekommen? Keine Platz mehr für neue Adressen!
+}
 
 void PhilipsLampLib::setLamps() {
-  // Warte bis fertig gesendet
+  // Warte bis fertig gesendet und bereit
   while ((sendByte(0xF5) & 0x1F) > 1) {
   };
 
@@ -224,7 +270,7 @@ void PhilipsLampLib::setLamps() {
   data[10] = 0x03;
 
   // Counter
-  data[11] = count++;
+  data[11] = counter++;
 
   // HSV
   data[12] = random(0, 255);
