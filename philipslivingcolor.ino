@@ -1,27 +1,34 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 
 #include "PhilipsLampLib.h"
+
+#define LED_RED 2
+#define LED_BLUE 16
 
 PhilipsLampLib plc;
 
 void setup() {
-  pinMode(16, OUTPUT);
-  pinMode(2, OUTPUT);
+  pinMode(LED_BLUE, OUTPUT);
+  pinMode(LED_RED, OUTPUT);
 
   Serial.begin(115200);
-  delay(1000);
-  Serial.println("START");
-  digitalWrite(2, true);
+  digitalWrite(LED_RED, true);
   plc.setSerial(&Serial);
-  // delay(1000);
-  plc.searchLamps();
-  digitalWrite(2, false);
 
-  digitalWrite(16, true);
+  if (plc.searchLamps()) {
+    Serial.println("FOUND");
+  } else {
+    Serial.println("NIX");
+  }
+
+  digitalWrite(LED_RED, false);
+  digitalWrite(LED_BLUE, true);
 }
 
 void loop() {
-  plc.setLamps(CMD_SET_COLOR, 100, 100, 100);
+  plc.setLamps(CMD_ON, 100, 200, 200);
   delay(500);
-  // Serial.println("OK4");
+  plc.setLamps(CMD_OFF, 100, 100, 100);
+  delay(500);
 }

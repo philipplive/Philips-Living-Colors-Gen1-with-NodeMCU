@@ -12,7 +12,6 @@
 class PhilipsLampLib {
  private:
   Stream *_serial;
-  unsigned char lamps[MAX_LAMPS][8];  // Lampenadressen (je 8 Byte)
   void debug(unsigned char data);
   void debugLn(const char *data);
 
@@ -20,6 +19,7 @@ class PhilipsLampLib {
   unsigned char counter;
 
  public:
+  unsigned char lamps[MAX_LAMPS][8];  // Lampenadressen (je 8 Byte)
   PhilipsLampLib();
   void setSerial(Stream *serial);
   void reset();
@@ -27,8 +27,9 @@ class PhilipsLampLib {
   /**
       Suche X-Sekunden nach Sendersignalen und speichere die Empfangsadressen
       @param duration Anzahl Durchläufe (je 100ms)
+      @return Wurden Lampen gefunden?
   */
-  void searchLamps(unsigned char duration = 50);
+  unsigned char searchLamps(unsigned char duration = 100);
   void setLamps(unsigned char cmd, unsigned char h = 0, unsigned char s = 0,
                 unsigned char v = 0);
   void addLamp(unsigned char *address);

@@ -142,8 +142,9 @@ void PhilipsLampLib::reset() {
   digitalWrite(SPI_CS, HIGH);
 }
 
-void PhilipsLampLib::searchLamps(unsigned char duration) {
+unsigned char PhilipsLampLib::searchLamps(unsigned char duration) {
   unsigned char result = 0;
+  unsigned char foundLamps = 0;
 
   // SIDLE
   sendStrobe(CC2500_CMD_SIDLE);
@@ -176,11 +177,10 @@ void PhilipsLampLib::searchLamps(unsigned char duration) {
       // Paket auf Gültigkeit überprüfen
       if (data[0] == 14 && data[9] == 17 &&
           (data[10] == 3 || data[10] == 5 || data[10] == 7)) {
-        debugLn("Paket OK");
-
         addLamp(data + 1);
+        foundLamps++;
       } else {
-        debugLn("Paket ungültig");
+        // Paket ungültig
       }
     }
 
@@ -198,6 +198,8 @@ void PhilipsLampLib::searchLamps(unsigned char duration) {
     // Einzelnes Byte RX FIFO auslesen
     sendCommand(0xBF, 0x00);
   }
+
+  return foundLamps;
 };
 
 void PhilipsLampLib::addLamp(unsigned char* address) {
@@ -270,15 +272,15 @@ void PhilipsLampLib::setLamps(unsigned char cmd, unsigned char h,
 
     data[9] = 17;
 
-    data[10] = 0x03;
+    data[10] = cmd;
 
     // Counter
     data[11] = counter++;
 
     // HSV
-    data[12] = random(0, 255);
-    data[13] = random(0, 255);
-    data[14] = random(0, 255);
+    data[12] = s;
+    data[13] = h;
+    data[14] = v;
 
     // SIDLE
     sendStrobe(CC2500_CMD_SIDLE);
