@@ -28,5 +28,5 @@ Befehle:
 | ------ | --------- |
 | 0x01 | Unbekannt |
 | 0x03 | HSV Wert setzen |
-| 0x05 | Lampe einschalten |
+| 0x05 | Lampe einschalten (als Parameter können ebenfalls die HSV Werte gesetzt werden) |
 | 0x07 | Lampe ausschalten |
