@@ -9,6 +9,8 @@
 PhilipsLampLib plc;
 
 void setup() {
+  EEPROM.begin(512);
+
   pinMode(LED_BLUE, OUTPUT);
   pinMode(LED_RED, OUTPUT);
 
@@ -32,3 +34,15 @@ void loop() {
   plc.setLamps(CMD_OFF, 100, 100, 100);
   delay(500);
 }
+
+void saveLamps() {
+  int addr = 0;
+
+  EEPROM.write(addr, 'a');
+  addr++;  // Increment address
+  EEPROM.write(addr, 'b');
+  addr++;  // Increment address
+  EEPROM.write(addr, 'C');
+}
+
+void loadLamps() { EEPROM.read(1); }

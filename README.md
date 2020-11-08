@@ -1,6 +1,11 @@
 # Philips Living Colors (Gen 1) mit NodeMCU + CC2500 steuern
+<img src="./doc/header.jpg"/>
 
-### Protokol
+## Materialliste
+* NodeMCU (v0.9)
+* CC2500
+
+## Protokol
 Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig scheinen
 
 | Byte  | Beschreibung |
