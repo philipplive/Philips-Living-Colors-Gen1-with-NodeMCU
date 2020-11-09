@@ -3,8 +3,9 @@
 
 #include "PhilipsLampLib.h"
 
-#define LED_RED 2
-#define LED_BLUE 16
+#define LED_RED 2    // Setup LED
+#define LED_BLUE 16  // Runing LED
+#define BTN_FLASH 0
 
 PhilipsLampLib plc;
 
@@ -18,10 +19,13 @@ void setup() {
   digitalWrite(LED_RED, true);
   plc.setSerial(&Serial);
 
+  // Beim Start nach Signalen suchen
   if (plc.searchLamps()) {
-    Serial.println("FOUND");
+    // Falls Lampen gefunden, diese im EEPROM speichern
+    saveLamps();
   } else {
-    Serial.println("NIX");
+    // Falls keine neuen Lampen gefunden, Lampen aus EEPROM setzen
+    loadLamps();
   }
 
   digitalWrite(LED_RED, false);
@@ -33,16 +37,29 @@ void loop() {
   delay(500);
   plc.setLamps(CMD_OFF, 100, 100, 100);
   delay(500);
+
+  digitalWrite(LED_RED, digitalRead(BTN_FLASH));
 }
 
 void saveLamps() {
   int addr = 0;
 
-  EEPROM.write(addr, 'a');
-  addr++;  // Increment address
-  EEPROM.write(addr, 'b');
-  addr++;  // Increment address
-  EEPROM.write(addr, 'C');
+  for (int l = 0; l < MAX_LAMPS; l++) {
+    for (int i = 0; i < 8; i++) {
+      EEPROM.write(addr++, plc.lamps[l][i]);
+    }
+  }
+
+  EEPROM.commit();
 }
 
-void loadLamps() { EEPROM.read(1); }
+void loadLamps() {
+  int addr = 0;
+  Serial.println("EEPROM READ");
+
+  for (int l = 0; l < MAX_LAMPS; l++) {
+    for (int i = 0; i < 8; i++) {
+      plc.lamps[l][i] = EEPROM.read(addr++);
+    }
+  }
+}

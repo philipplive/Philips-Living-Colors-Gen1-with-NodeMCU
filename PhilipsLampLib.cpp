@@ -249,13 +249,23 @@ void PhilipsLampLib::addLamp(unsigned char* address) {
   // Hier angekommen? Keine Platz mehr für neue Adressen!
 }
 
+uint8_t PhilipsLampLib::countLamps() {
+  uint8_t count = 0;
+
+  for (int l = 0; l < MAX_LAMPS; l++) {
+    if (lamps[l][0] != 0 && lamps[l][1] != 0 && lamps[l][2] != 0 &&
+        lamps[l][3] != 0) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
 void PhilipsLampLib::setLamps(unsigned char cmd, unsigned char h,
                               unsigned char s, unsigned char v) {
   for (int l = 0; l < MAX_LAMPS; l++) {
     if (lamps[l][0] == 0) continue;
-
-    while ((sendByte(0xF5) & 0x1F) > 1) {
-    };
 
     unsigned char data[15];
 
@@ -332,18 +342,6 @@ unsigned char PhilipsLampLib::sendBurstCommand(unsigned char command,
   }
 
   digitalWrite(SPI_CS, HIGH);
-  return result;
-};
-
-unsigned char PhilipsLampLib::sendByte(unsigned char data) {
-  unsigned char result = 0;
-
-  digitalWrite(SPI_CS, LOW);
-  delayMicroseconds(1);
-  result = SPI.transfer(data);
-  delayMicroseconds(5);
-  digitalWrite(SPI_CS, HIGH);
-
   return result;
 };
 

@@ -6,7 +6,7 @@
 * CC2500
 
 ## Protokol
-Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig scheinen
+Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig scheinen.
 
 | Byte  | Beschreibung |
 | ------ | --------- |
@@ -26,7 +26,7 @@ Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig sc
 | 14  | Wert S  |
 | 15  | Wert V  |
 
-* Die Adresse ist offenbar 8 Byte lang
+* Die Adresse ist offenbar 8 Byte lang (da die letzten 4 Byte immer identisch sind, nehme ich an, dies ist die Absenderadresse, also die Adresse der Fernbedienung)
 
 Befehle: 
 | Wert  | Befehl |

@@ -33,9 +33,13 @@ class PhilipsLampLib {
   void setLamps(unsigned char cmd, unsigned char h = 0, unsigned char s = 0,
                 unsigned char v = 0);
   void addLamp(unsigned char *address);
+
+  /**
+    @return Wieviele Lampen sind aktuell registriert?
+  */
+  uint8_t countLamps();
   void sendStrobe(byte strobe);
   unsigned char sendCommand(unsigned char command, unsigned char data);
   unsigned char sendBurstCommand(unsigned char command, unsigned char *data,
                                  unsigned char length);
-  unsigned char sendByte(unsigned char data);
 };
