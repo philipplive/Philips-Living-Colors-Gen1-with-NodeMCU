@@ -143,8 +143,18 @@ void PhilipsLampLib::reset() {
 }
 
 unsigned char PhilipsLampLib::searchLamps(unsigned char duration) {
+  unsigned char lamps = 0;
+
+  listening(duration, [this, &lamps](uint8_t* data) {
+    if (addLamp(data + 1)) lamps++;
+  });
+
+  return lamps;
+};
+
+void PhilipsLampLib::listening(unsigned char duration,
+                               std::function<void(uint8_t*)> callback) {
   unsigned char result = 0;
-  unsigned char foundLamps = 0;
 
   // SIDLE
   sendStrobe(CC2500_CMD_SIDLE);
@@ -174,11 +184,10 @@ unsigned char PhilipsLampLib::searchLamps(unsigned char duration) {
       // Gesamtes Restpaket auslesen
       sendBurstCommand(0xFF, data, 17);
 
-      // Paket auf Gültigkeit überprüfen
+      // Paket auf Gültigkeit prüfen
       if (data[0] == 14 && data[9] == 17 &&
           (data[10] == 3 || data[10] == 5 || data[10] == 7)) {
-        addLamp(data + 1);
-        foundLamps++;
+        callback(data);
       } else {
         // Paket ungültig
       }
@@ -198,11 +207,9 @@ unsigned char PhilipsLampLib::searchLamps(unsigned char duration) {
     // Einzelnes Byte RX FIFO auslesen
     sendCommand(0xBF, 0x00);
   }
+}
 
-  return foundLamps;
-};
-
-void PhilipsLampLib::addLamp(unsigned char* address) {
+bool PhilipsLampLib::addLamp(unsigned char* address) {
   Serial.println("Suche Adresse:");
 
   for (int i = 0; i < 8; i++) {
@@ -231,7 +238,7 @@ void PhilipsLampLib::addLamp(unsigned char* address) {
       if (lamps[l][i] != address[i]) exist = false;
     }
 
-    if (exist) return;
+    if (exist) return false;
   }
 
   // Füge Adresse hinzu
@@ -242,7 +249,7 @@ void PhilipsLampLib::addLamp(unsigned char* address) {
         lamps[l][i] = address[i];
       }
 
-      return;
+      return true;
     }
   }
 
