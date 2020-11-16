@@ -1,3 +1,6 @@
+#ifndef CLASS_PHILIPSLAMPLIB
+#define CLASS_PHILIPSLAMPLIB
+
 #include <SPI.h>
 #include <SoftwareSerial.h>
 
@@ -46,7 +49,11 @@ class PhilipsLampLib {
   /**
       Suche X-Sekunden nach Paketen
       @param duration Anzahl Durchläufe (je 100ms)
-      @param callback Callback welcher bei einem empfangenen Paket aufgerufen wird
+      @param callback Callback welcher bei einem empfangenen Paket aufgerufen
+     wird
   */
-  void listening(unsigned char duration, std::function<void(uint8_t*) > callback);
+  void listening(unsigned char duration,
+                 std::function<void(uint8_t *)> callback);
 };
+
+#endif
