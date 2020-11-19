@@ -142,8 +142,8 @@ void PhilipsLampLib::reset() {
   digitalWrite(SPI_CS, HIGH);
 }
 
-unsigned char PhilipsLampLib::searchLamps(unsigned char duration) {
-  unsigned char lamps = 0;
+uint8_t PhilipsLampLib::searchLamps(uint8_t duration) {
+  uint8_t lamps = 0;
 
   listening(duration, [this, &lamps](uint8_t* data) {
     if (addLamp(data + 1)) lamps++;
@@ -152,9 +152,9 @@ unsigned char PhilipsLampLib::searchLamps(unsigned char duration) {
   return lamps;
 };
 
-void PhilipsLampLib::listening(unsigned char duration,
+void PhilipsLampLib::listening(uint8_t duration,
                                std::function<void(uint8_t*)> callback) {
-  unsigned char result = 0;
+  uint8_t result = 0;
 
   // SIDLE
   sendStrobe(CC2500_CMD_SIDLE);
@@ -179,7 +179,7 @@ void PhilipsLampLib::listening(unsigned char duration,
     result = sendCommand(0xFB, 0x00);
 
     if (result >= 17) {
-      unsigned char data[17];
+      uint8_t data[17];
 
       // Gesamtes Restpaket auslesen
       sendBurstCommand(0xFF, data, 17);
@@ -197,9 +197,6 @@ void PhilipsLampLib::listening(unsigned char duration,
     sendStrobe(CC2500_CMD_SIDLE);
   }
 
-  // SIDLE
-  sendStrobe(CC2500_CMD_SIDLE);
-
   // Restlänge auslesen
   result = sendCommand(0xFB, 0x00);
 
@@ -209,7 +206,7 @@ void PhilipsLampLib::listening(unsigned char duration,
   }
 }
 
-bool PhilipsLampLib::addLamp(unsigned char* address) {
+bool PhilipsLampLib::addLamp(uint8_t* address) {
   Serial.println("Suche Adresse:");
 
   for (int i = 0; i < 8; i++) {
@@ -253,7 +250,7 @@ bool PhilipsLampLib::addLamp(unsigned char* address) {
     }
   }
 
-  // Hier angekommen? Keine Platz mehr für neue Adressen!
+  // Hier angekommen, keine Platz mehr für neue Adressen!
 }
 
 uint8_t PhilipsLampLib::countLamps() {
@@ -269,14 +266,14 @@ uint8_t PhilipsLampLib::countLamps() {
   return count;
 }
 
-void PhilipsLampLib::setLamps(unsigned char cmd, unsigned char h,
-                              unsigned char s, unsigned char v) {
+void PhilipsLampLib::setLamps(uint8_t cmd, uint8_t h,
+                              uint8_t s, uint8_t v) {
   for (int l = 0; l < MAX_LAMPS; l++) {
     if (lamps[l][0] == 0) continue;
 
-    unsigned char data[15];
+    uint8_t data[15];
 
-    data[0] = 0x0E;  // Paketlänge
+    data[0] = 0x0E;
 
     data[1] = lamps[l][0];
     data[2] = lamps[l][1];
@@ -294,9 +291,9 @@ void PhilipsLampLib::setLamps(unsigned char cmd, unsigned char h,
     // Counter
     data[11] = counter++;
 
-    // HSV
-    data[12] = s;
-    data[13] = h;
+    // HSV Farbwerte
+    data[12] = h;
+    data[13] = s;
     data[14] = v;
 
     // SIDLE
@@ -319,27 +316,27 @@ void PhilipsLampLib::sendStrobe(byte strobe) {
   digitalWrite(SPI_CS, HIGH);
 };
 
-unsigned char PhilipsLampLib::sendCommand(unsigned char command,
-                                          unsigned char data) {
+uint8_t PhilipsLampLib::sendCommand(uint8_t command,
+                                          uint8_t data) {
   digitalWrite(SPI_CS, LOW);
   delayMicroseconds(1);
   SPI.write(command);
   delayMicroseconds(5);
-  unsigned char result = SPI.transfer(data);
+  uint8_t result = SPI.transfer(data);
   delayMicroseconds(5);
   digitalWrite(SPI_CS, HIGH);
   return result;
 };
 
-unsigned char PhilipsLampLib::sendBurstCommand(unsigned char command,
-                                               unsigned char* data,
-                                               unsigned char length) {
+uint8_t PhilipsLampLib::sendBurstCommand(uint8_t command,
+                                               uint8_t* data,
+                                               uint8_t length) {
   digitalWrite(SPI_CS, LOW);
   delayMicroseconds(1);
   SPI.write(command);
   delayMicroseconds(1);
 
-  unsigned char result = 0;
+  uint8_t result = 0;
 
   // Daten senden
   for (int i = 0; i < length; ++i) {
@@ -352,7 +349,7 @@ unsigned char PhilipsLampLib::sendBurstCommand(unsigned char command,
   return result;
 };
 
-void PhilipsLampLib::debug(unsigned char data) {
+void PhilipsLampLib::debug(uint8_t data) {
   if (_serial) _serial->print(data);
 };
 

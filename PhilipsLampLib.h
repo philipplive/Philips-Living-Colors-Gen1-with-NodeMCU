@@ -15,14 +15,14 @@
 class PhilipsLampLib {
  private:
   Stream *_serial;
-  void debug(unsigned char data);
+  void debug(uint8_t data);
   void debugLn(const char *data);
 
  protected:
-  unsigned char counter;
+  uint8_t counter;
 
  public:
-  unsigned char lamps[MAX_LAMPS][8];  // Lampenadressen (je 8 Byte)
+  uint8_t lamps[MAX_LAMPS][8];  // Lampenadressen (je 8 Byte)
   PhilipsLampLib();
   void setSerial(Stream *serial);
   void reset();
@@ -32,19 +32,19 @@ class PhilipsLampLib {
       @param duration Anzahl Durchläufe (je 100ms)
       @return Wurden Lampen gefunden?
   */
-  unsigned char searchLamps(unsigned char duration = 100);
-  void setLamps(unsigned char cmd, unsigned char h = 0, unsigned char s = 0,
-                unsigned char v = 0);
-  bool addLamp(unsigned char *address);
+  uint8_t searchLamps(uint8_t duration = 50);
+  void setLamps(uint8_t cmd, uint8_t h = 0, uint8_t s = 0,
+                uint8_t v = 0);
+  bool addLamp(uint8_t *address);
 
   /**
     @return Wieviele Lampen sind aktuell registriert?
   */
   uint8_t countLamps();
   void sendStrobe(byte strobe);
-  unsigned char sendCommand(unsigned char command, unsigned char data);
-  unsigned char sendBurstCommand(unsigned char command, unsigned char *data,
-                                 unsigned char length);
+  uint8_t sendCommand(uint8_t command, uint8_t data);
+  uint8_t sendBurstCommand(uint8_t command, uint8_t *data,
+                                 uint8_t length);
 
   /**
       Suche X-Sekunden nach Paketen
@@ -52,7 +52,7 @@ class PhilipsLampLib {
       @param callback Callback welcher bei einem empfangenen Paket aufgerufen
      wird
   */
-  void listening(unsigned char duration,
+  void listening(uint8_t duration,
                  std::function<void(uint8_t *)> callback);
 };
 
