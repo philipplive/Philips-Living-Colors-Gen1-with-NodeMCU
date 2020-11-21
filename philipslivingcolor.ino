@@ -11,17 +11,13 @@ PhilipsLampLib plc;
 
 void setup() {
   EEPROM.begin(512);
-
-  // pinMode(LED_BLUE, OUTPUT);
   pinMode(LED_RED, OUTPUT);
-
   Serial.begin(115200);
-  digitalWrite(LED_RED, false);
-  digitalWrite(LED_BLUE, false);
-  // digitalWrite(LED_BLUE, false);
   plc.setSerial(&Serial);
 
-  // Beim Start nach Signalen suchen
+  digitalWrite(LED_RED, false);
+
+  // Beim Start nach Sendersignalen suchen
   if (plc.searchLamps()) {
     // Falls Lampen gefunden, diese in EEPROM speichern
     saveLamps();
