@@ -12,8 +12,6 @@ PhilipsLampLib::PhilipsLampLib() {
   pinMode(SPI_CS, OUTPUT);
   digitalWrite(SPI_CS, HIGH);
 
-  delay(1);
-
   // reset device (0x30)
   reset();
 
@@ -134,14 +132,6 @@ PhilipsLampLib::PhilipsLampLib() {
   sendStrobe(CC2500_CMD_SIDLE);
 }
 
-void PhilipsLampLib::reset() {
-  digitalWrite(SPI_CS, LOW);
-  delayMicroseconds(2);
-  SPI.transfer(0x30);
-  delayMicroseconds(45);
-  digitalWrite(SPI_CS, HIGH);
-}
-
 uint8_t PhilipsLampLib::searchLamps(uint8_t duration) {
   uint8_t lamps = 0;
 
@@ -207,14 +197,16 @@ void PhilipsLampLib::listening(uint8_t duration,
 }
 
 bool PhilipsLampLib::addLamp(uint8_t* address) {
-  Serial.println("Suche Adresse:");
+  // Debug
+  Serial.print("Suche Adresse: ");
 
   for (int i = 0; i < 8; i++) {
     Serial.print(address[i]);
     Serial.print(" ");
   }
 
-  Serial.println("Vorhandene Adressen:");
+  Serial.println("\r\nVorhandene Adressen im Speicher:");
+
   for (int l = 0; l < MAX_LAMPS; l++) {
     for (int i = 0; i < 8; i++) {
       Serial.print(lamps[l][i]);
@@ -266,8 +258,7 @@ uint8_t PhilipsLampLib::countLamps() {
   return count;
 }
 
-void PhilipsLampLib::setLamps(uint8_t cmd, uint8_t h,
-                              uint8_t s, uint8_t v) {
+void PhilipsLampLib::setLamps(uint8_t cmd, uint8_t h, uint8_t s, uint8_t v) {
   for (int l = 0; l < MAX_LAMPS; l++) {
     if (lamps[l][0] == 0) continue;
 
@@ -308,6 +299,14 @@ void PhilipsLampLib::setLamps(uint8_t cmd, uint8_t h,
   }
 };
 
+void PhilipsLampLib::reset() {
+  digitalWrite(SPI_CS, LOW);
+  delayMicroseconds(2);
+  SPI.transfer(0x30);
+  delayMicroseconds(45);
+  digitalWrite(SPI_CS, HIGH);
+}
+
 void PhilipsLampLib::sendStrobe(byte strobe) {
   digitalWrite(SPI_CS, LOW);
   delayMicroseconds(1);
@@ -316,8 +315,7 @@ void PhilipsLampLib::sendStrobe(byte strobe) {
   digitalWrite(SPI_CS, HIGH);
 };
 
-uint8_t PhilipsLampLib::sendCommand(uint8_t command,
-                                          uint8_t data) {
+uint8_t PhilipsLampLib::sendCommand(uint8_t command, uint8_t data) {
   digitalWrite(SPI_CS, LOW);
   delayMicroseconds(1);
   SPI.write(command);
@@ -328,9 +326,8 @@ uint8_t PhilipsLampLib::sendCommand(uint8_t command,
   return result;
 };
 
-uint8_t PhilipsLampLib::sendBurstCommand(uint8_t command,
-                                               uint8_t* data,
-                                               uint8_t length) {
+void PhilipsLampLib::sendBurstCommand(uint8_t command, uint8_t* data,
+                                      uint8_t length) {
   digitalWrite(SPI_CS, LOW);
   delayMicroseconds(1);
   SPI.write(command);
@@ -346,7 +343,6 @@ uint8_t PhilipsLampLib::sendBurstCommand(uint8_t command,
   }
 
   digitalWrite(SPI_CS, HIGH);
-  return result;
 };
 
 void PhilipsLampLib::debug(uint8_t data) {

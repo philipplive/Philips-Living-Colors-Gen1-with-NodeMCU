@@ -42,7 +42,7 @@ class PhilipsLampLib {
   uint8_t countLamps();
   void sendStrobe(byte strobe);
   uint8_t sendCommand(uint8_t command, uint8_t data);
-  uint8_t sendBurstCommand(uint8_t command, uint8_t *data, uint8_t length);
+  void sendBurstCommand(uint8_t command, uint8_t *data, uint8_t length);
 
   /**
   Suche X-Sekunden nach Paketen
