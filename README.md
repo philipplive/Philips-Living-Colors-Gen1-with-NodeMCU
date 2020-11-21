@@ -2,7 +2,7 @@
 <img src="./doc/header.jpg"/>
 
 ## Programmablauf
-Das Programm dient dazu, die Lampen, welche an einem Stromschalter sind, nach einem Stromlosen Zustand automatisch einzuschalten (leider bleiben diese ansonsten Dunkel).
+Das Programm dient dazu, die Lampen, welche an einer geschalteten Steckdose angeschlossen sind, nach einem stromlosen Zustand, automatisch einzuschalten (diese müssen ansonsten via Fernbedienung Manuell eingeschaltet werden).
 ### Start
 In den ersten X Sekunden wird nach Sendersignalen gelausch und falls empfangen, diese als neue Lampen im EEPROM abgelegt. Falls nichts gefunden, werden alte Lampen aus dem EEPROM geladen.
 ### Loop
@@ -18,7 +18,7 @@ Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig sc
 
 | Byte  | Beschreibung |
 | ------ | --------- |
-| 1  | Immer 0x0E / 14 (nachfolgende Paketgrösse?) |
+| 1  | Immer 0x0E / 14  |
 | 2  | Adresse  |
 | 3  | Adresse  |
 | 4  | Adresse  |
