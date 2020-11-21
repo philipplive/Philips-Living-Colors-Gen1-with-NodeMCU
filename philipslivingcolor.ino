@@ -101,8 +101,9 @@ void loadLamps() {
 Default-Farbe im EEPROM ablegen
 */
 void saveColors(uint8_t* hsv) {
-  Serial.println("WRITE EEPROM");
-  for (int c = 0; c < 3; c++) EEPROM.write(500 + c, hsv[c]);
+  for (int c = 0; c < 3; c++) {
+    EEPROM.write(500 + c, hsv[c]);
+  }
 
   EEPROM.commit();
 }
