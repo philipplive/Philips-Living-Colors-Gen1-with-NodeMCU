@@ -12,6 +12,7 @@ Ein Taster ermöglicht zudem ein manuelles setzen der Farbe (pro Tastendruck wir
 ## Materialliste
 * NodeMCU (v0.9)
 * CC2500
+* Philips Living Colors Lampe (Generation 1)
 
 ## Protokol
 Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig scheinen.
