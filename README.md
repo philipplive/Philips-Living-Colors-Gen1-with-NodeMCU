@@ -1,6 +1,14 @@
 # Philips Living Colors (Gen 1) mit NodeMCU + CC2500 steuern
 <img src="./doc/header.jpg"/>
 
+## Programmablauf
+Das Programm dient dazu, die Lampen, welche an einem Stromschalter sind, nach einem Stromlosen Zustand automatisch einzuschalten (leider bleiben diese ansonsten Dunkel).
+### Start
+In den ersten X Sekunden wird nach Sendersignalen gelausch und falls empfangen, diese als neue Lampen im EEPROM abgelegt. Falls nichts gefunden, werden alte Lampen aus dem EEPROM geladen.
+### Loop
+Grundsätzlich passiert hier nichts mehr. Wird jedoch ein Sendersignal empfangen, so wird dies als neue Default-Farbe gespeichert welche beim Start geladen wird.
+Ein Taster ermöglicht zudem ein manuelles setzen der Farbe (pro Tastendruck wird der H-Wert um jeweils ca. 28° erhöht).
+
 ## Materialliste
 * NodeMCU (v0.9)
 * CC2500
@@ -38,3 +46,4 @@ Befehle:
 
 ## Dokumente
 * CC2500 Dokumentation [> hier](https://www.ti.com/lit/ds/swrs040c/swrs040c.pdf?ts=1604949563747)
+* HSV Farbraum [> hier](https://de.wikipedia.org/wiki/HSV-Farbraum)

@@ -28,32 +28,29 @@ class PhilipsLampLib {
   void reset();
 
   /**
-      Suche X-Sekunden nach Sendersignalen und speichere die Empfangsadressen
-      @param duration Anzahl Durchläufe (je 100ms)
-      @return Wurden Lampen gefunden?
+  Suche X-Sekunden nach Sendersignalen und speichere die Empfangsadressen
+  @param duration Anzahl Durchläufe (je 100ms)
+  @return Wurden Lampen gefunden?
   */
-  uint8_t searchLamps(uint8_t duration = 50);
-  void setLamps(uint8_t cmd, uint8_t h = 0, uint8_t s = 0,
-                uint8_t v = 0);
+  uint8_t searchLamps(uint8_t duration = 100);
+  void setLamps(uint8_t cmd, uint8_t h = 0, uint8_t s = 0, uint8_t v = 0);
   bool addLamp(uint8_t *address);
 
   /**
-    @return Wieviele Lampen sind aktuell registriert?
+  @return Wieviele Lampen sind aktuell registriert?
   */
   uint8_t countLamps();
   void sendStrobe(byte strobe);
   uint8_t sendCommand(uint8_t command, uint8_t data);
-  uint8_t sendBurstCommand(uint8_t command, uint8_t *data,
-                                 uint8_t length);
+  uint8_t sendBurstCommand(uint8_t command, uint8_t *data, uint8_t length);
 
   /**
-      Suche X-Sekunden nach Paketen
-      @param duration Anzahl Durchläufe (je 100ms)
-      @param callback Callback welcher bei einem empfangenen Paket aufgerufen
-     wird
+  Suche X-Sekunden nach Paketen
+  @param duration Anzahl Durchläufe (je 100ms)
+  @param callback Callback welcher bei einem empfangenen Paket aufgerufen
+  wird
   */
-  void listening(uint8_t duration,
-                 std::function<void(uint8_t *)> callback);
+  void listening(uint8_t duration, std::function<void(uint8_t *)> callback);
 };
 
 #endif

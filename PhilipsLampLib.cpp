@@ -173,7 +173,7 @@ void PhilipsLampLib::listening(uint8_t duration,
     sendStrobe(0x34);
 
     // Kurz warten, bis RX gefüllt wird (falls jemand sendet)
-    delay(100);
+    delay(50);
 
     // Anzahl Bytes im RX (sollten 17 sein)
     result = sendCommand(0xFB, 0x00);
