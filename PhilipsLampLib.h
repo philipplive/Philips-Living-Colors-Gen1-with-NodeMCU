@@ -14,7 +14,8 @@
 
 class PhilipsLampLib {
  private:
-  Stream *_serial;
+  Stream *_stream;
+  void debug(const char *data);
   void debug(uint8_t data);
   void debugLn(const char *data);
 
@@ -24,7 +25,7 @@ class PhilipsLampLib {
  public:
   uint8_t lamps[MAX_LAMPS][8];  // Lampenadressen (je 8 Byte)
   PhilipsLampLib();
-  void setSerial(Stream *serial);
+  void setDebugStream(Stream *stream);
   void reset();
 
   /**

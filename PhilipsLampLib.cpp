@@ -1,7 +1,7 @@
 #include "PhilipsLampLib.h"
 
 // Referenz zu einem Stream für Debug
-void PhilipsLampLib::setSerial(Stream* serial) { _serial = serial; }
+void PhilipsLampLib::setDebugStream(Stream* stream) { _stream = stream; }
 
 PhilipsLampLib::PhilipsLampLib() {
   // SPI config
@@ -198,21 +198,21 @@ void PhilipsLampLib::listening(uint8_t duration,
 
 bool PhilipsLampLib::addLamp(uint8_t* address) {
   // Debug
-  Serial.print("Suche Adresse: ");
+  debug("Suche Adresse: ");
 
   for (int i = 0; i < 8; i++) {
     Serial.print(address[i]);
     Serial.print(" ");
   }
 
-  Serial.println("\r\nVorhandene Adressen im Speicher:");
+  debug("\r\nVorhandene Adressen im Speicher:\r\n");
 
   for (int l = 0; l < MAX_LAMPS; l++) {
     for (int i = 0; i < 8; i++) {
-      Serial.print(lamps[l][i]);
-      Serial.print(" ");
+      debug(lamps[l][i]);
+      debug(" ");
     }
-    Serial.println("");
+    debug("\r\n");
   }
 
   // Prüfe ob Adresse schon vorhanden
@@ -243,6 +243,7 @@ bool PhilipsLampLib::addLamp(uint8_t* address) {
   }
 
   // Hier angekommen, keine Platz mehr für neue Adressen!
+  debug("Adressspeicer voll!");
 }
 
 uint8_t PhilipsLampLib::countLamps() {
@@ -264,8 +265,10 @@ void PhilipsLampLib::setLamps(uint8_t cmd, uint8_t h, uint8_t s, uint8_t v) {
 
     uint8_t data[15];
 
+    // Fix
     data[0] = 0x0E;
 
+    // Adresse
     data[1] = lamps[l][0];
     data[2] = lamps[l][1];
     data[3] = lamps[l][2];
@@ -275,8 +278,10 @@ void PhilipsLampLib::setLamps(uint8_t cmd, uint8_t h, uint8_t s, uint8_t v) {
     data[7] = lamps[l][6];
     data[8] = lamps[l][7];
 
+    // Fix
     data[9] = 17;
 
+    // Befehl
     data[10] = cmd;
 
     // Counter
@@ -302,7 +307,7 @@ void PhilipsLampLib::setLamps(uint8_t cmd, uint8_t h, uint8_t s, uint8_t v) {
 void PhilipsLampLib::reset() {
   digitalWrite(SPI_CS, LOW);
   delayMicroseconds(2);
-  SPI.transfer(0x30);
+  SPI.write(0x30);
   delayMicroseconds(45);
   digitalWrite(SPI_CS, HIGH);
 }
@@ -310,7 +315,7 @@ void PhilipsLampLib::reset() {
 void PhilipsLampLib::sendStrobe(byte strobe) {
   digitalWrite(SPI_CS, LOW);
   delayMicroseconds(1);
-  SPI.transfer(strobe);
+  SPI.write(strobe);
   delayMicroseconds(1);
   digitalWrite(SPI_CS, HIGH);
 };
@@ -346,9 +351,13 @@ void PhilipsLampLib::sendBurstCommand(uint8_t command, uint8_t* data,
 };
 
 void PhilipsLampLib::debug(uint8_t data) {
-  if (_serial) _serial->print(data);
+  if (_stream) _stream->print(data);
 };
 
 void PhilipsLampLib::debugLn(const char* data) {
-  if (_serial) _serial->println(data);
+  if (_stream) _stream->println(data);
+};
+
+void PhilipsLampLib::debug(const char* data) {
+  if (_stream) _stream->print(data);
 };

@@ -13,7 +13,7 @@ void setup() {
   EEPROM.begin(512);
   pinMode(LED_RED, OUTPUT);
   Serial.begin(115200);
-  plc.setSerial(&Serial);
+  plc.setDebugStream(&Serial);
 
   digitalWrite(LED_RED, false);
 
@@ -21,14 +21,16 @@ void setup() {
   if (plc.searchLamps()) {
     // Falls Lampen gefunden, diese in EEPROM speichern
     saveLamps();
+    Serial.print("Neue Lampenadressen gespeichert\r\n");
   } else {
     // Falls keine neuen Lampen gefunden, Lampen aus EEPROM setzen
     loadLamps();
+    Serial.print("Lampenadressen aus EEPROM geladen\r\n");
   }
 
   digitalWrite(LED_RED, true);
 
-  // Lampe mit letztem bekannten Farbe starten
+  // Lampe mit letzter bekannter Farbe starten
   uint8_t* color = getColors();
   plc.setLamps(CMD_ON, color[0], color[1], color[2]);
 }
@@ -39,7 +41,6 @@ uint8_t wait = 0;
 void loop() {
   // Empfange ein Signal
   plc.listening(1, [](uint8_t* data) {
-    Serial.write("SIG");
     hsv[0] = data[12];
     hsv[1] = data[13];
     hsv[2] = data[14];
@@ -62,6 +63,7 @@ void loop() {
     hsv[1] = 0;
     hsv[2] = 0;
     wait = 0;
+    Serial.print("Neue Farbwerte gespeichert\r\n");
   }
 }
 
