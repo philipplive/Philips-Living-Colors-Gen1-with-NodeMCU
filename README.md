@@ -45,6 +45,7 @@ Befehle:
 | 0x05 | Lampe einschalten (als Parameter können ebenfalls die HSV Werte gesetzt werden) |
 | 0x07 | Lampe ausschalten |
 
-## Dokumente
-* CC2500 Dokumentation [> hier](https://www.ti.com/lit/ds/swrs040c/swrs040c.pdf?ts=1604949563747)
-* HSV Farbraum [> hier](https://de.wikipedia.org/wiki/HSV-Farbraum)
+## Dokumente / Artikel
+* CC2500 Dokumentation [> Link](https://www.ti.com/lit/ds/swrs040c/swrs040c.pdf?ts=1604949563747)
+* HSV Farbraum [> Link](https://de.wikipedia.org/wiki/HSV-Farbraum)
+* Init-Prozedur für den CC2500 habe ich hier entnommen [> Link](http://meuk.spritesserver.nl/projects/livcol/)

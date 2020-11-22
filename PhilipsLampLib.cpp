@@ -14,6 +14,7 @@ PhilipsLampLib::PhilipsLampLib() {
 
   // reset device (0x30)
   reset();
+  reset();
 
   // FSCTRL1 – Frequency Synthesizer Control
   sendCommand(0x0B, 0x09);
@@ -58,11 +59,9 @@ PhilipsLampLib::PhilipsLampLib() {
   sendCommand(0x22, 0x10);
 
   // MCSM0 – Main Radio Control State Machine
-  // Configuration
   sendCommand(0x18, 0x18);
 
   // FOCCFG – Frequency Offset Compensation
-  // Configuration
   sendCommand(0x19, 0x1D);
 
   // BSCFG – Bit Synchronization Configuration
