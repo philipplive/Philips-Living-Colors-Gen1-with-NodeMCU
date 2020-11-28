@@ -30,10 +30,10 @@ class PhilipsLampLib {
 
   /**
   Suche X-Sekunden nach Sendersignalen und speichere die Empfangsadressen
-  @param duration Anzahl Durchläufe (je 100ms)
+  @param duration Anzahl Durchläufe (je ca. 50ms)
   @return Wurden Lampen gefunden?
   */
-  uint8_t searchLamps(uint8_t duration = 100);
+  uint8_t searchLamps(uint8_t duration = 50);
   void setLamps(uint8_t cmd, uint8_t h = 0, uint8_t s = 0, uint8_t v = 0);
   bool addLamp(uint8_t *address);
 
