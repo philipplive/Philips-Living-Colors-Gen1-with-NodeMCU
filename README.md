@@ -1,5 +1,5 @@
 # Philips Living Colors (Gen 1) mit NodeMCU + CC2500 steuern
-<img src="./doc/header2.jpg"/>
+<img src="./doc/header1.jpg"/>
 
 ## Programmablauf
 Das Programm dient dazu, die Lampen, welche an einer geschalteten Steckdose angeschlossen sind, nach einem stromlosen Zustand, automatisch einzuschalten (diese müssen ansonsten via Fernbedienung Manuell eingeschaltet werden).
