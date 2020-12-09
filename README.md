@@ -4,7 +4,7 @@
 ## Programmablauf
 Das Programm dient dazu, die Lampen, welche an einer geschalteten Steckdose angeschlossen sind, nach einem stromlosen Zustand, automatisch einzuschalten (diese müssen ansonsten via Fernbedienung Manuell eingeschaltet werden).
 ### Start
-In den ersten X Sekunden wird nach Sendersignalen gesucht und falls empfangen, diese als neue Lampen im EEPROM abgelegt. Falls nichts gefunden, werden bekannte Lampen aus dem EEPROM geladen.
+In den ersten X Sekunden (ca. 7) booten die Lampen (einmaliger RGB Durchlauf) und können keine Signale empfangen. Diese Zeit nutze ich daher und suche nach Signalen einer Fernbedienung. Falls gefunden, werden diese als neue Lampen im EEPROM abgelegt. Falls nichts gefunden wurde, werden bekannte Lampen aus dem EEPROM geladen.
 ### Loop
 Grundsätzlich passiert hier nichts mehr. Wird jedoch ein Sendersignal empfangen, so wird dies als neue Default-Farbe gespeichert welche beim Start geladen wird.
 Ein Taster ermöglicht zudem ein manuelles setzen der Farbe (pro Tastendruck wird der H-Wert um jeweils ca. 28° rotiert).
