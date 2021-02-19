@@ -1,4 +1,4 @@
-# Philips Living Colors (Gen 1) mit NodeMCU + CC2500 steuern
+# Philips Living Colors (Gen 1) mit NodeMCU (ESP8266) + CC2500 steuern
 <img src="./doc/header1.jpg"/>
 
 ## Programmablauf
@@ -10,7 +10,7 @@ Grundsätzlich passiert hier nichts mehr. Wird jedoch ein Sendersignal empfangen
 Ein Taster ermöglicht zudem ein manuelles setzen der Farbe (pro Tastendruck wird der H-Wert um jeweils ca. 28° rotiert).
 
 ## Materialliste
-* NodeMCU (v0.9)
+* NodeMCU (v0.9) (ESP8266)
 * CC2500
 * Philips Living Colors Lampe (Generation 1)
 
