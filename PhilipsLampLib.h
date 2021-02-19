@@ -5,8 +5,8 @@
 #include <SoftwareSerial.h>
 
 #define CC2500_CMD_SIDLE 0x36  // Exit RX / TX, turn off frequency synthesizer
-#define SPI_CS 15
-#define MAX_LAMPS 10
+#define SPI_CS 15 // Pin für CS
+#define MAX_LAMPS 10 // Maximale anzahl Lampen
 
 #define CMD_SET_COLOR 3
 #define CMD_ON 5

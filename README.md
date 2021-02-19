@@ -45,6 +45,25 @@ Befehle:
 | 0x05 | Lampe einschalten (als Parameter können ebenfalls die HSV Werte gesetzt werden) |
 | 0x07 | Lampe ausschalten |
 
+## Usage 
+```c++
+PhilipsLampLib plc;
+
+// Suche X Durchläufe nach Sendersignalen und speichere diese als Lampen
+plc.searchLamps();
+
+// Einmal nach Packet suchen. Im Erfolgsfall die Methode aufrufen und das Packet als Datensatz übergeben
+plc.listening(1, [](uint8_t* data) {
+        // Packetaufbau siehe "Protokol"
+        hsv[0] = data[12];
+        hsv[1] = data[13];
+        hsv[2] = data[14];
+    });
+
+// Farbwert setzen
+plc.setLamps(CMD_ON, 255, 255, 255);
+```
+
 ## Dokumente / Artikel
 * CC2500 Dokumentation [> Link](https://www.ti.com/lit/ds/swrs040c/swrs040c.pdf?ts=1604949563747)
 * HSV Farbraum [> Link](https://de.wikipedia.org/wiki/HSV-Farbraum)
