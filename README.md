@@ -30,7 +30,7 @@ Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig sc
 | 9  | Adresse  |
 | 10  | Immer 0x11 / 17  |
 | 11  | Befehl   |
-| 12  | Vorlaufender Zähler  |
+| 12  | Vortlaufender Zähler  |
 | 13  | Wert H  |
 | 14  | Wert S  |
 | 15  | Wert V  |
