@@ -12,7 +12,7 @@ PhilipsLampLib::PhilipsLampLib() {
     pinMode(SPI_CS, OUTPUT);
     digitalWrite(SPI_CS, HIGH);
 
-    // reset device (0x30)
+    // Device zurücksetzen (0x30)
     reset();
     reset();
 
@@ -241,7 +241,7 @@ bool PhilipsLampLib::addLamp(uint8_t* address) {
     }
 
     // Hier angekommen, keine Platz mehr für neue Adressen!
-    debug("Adressspeicer voll!");
+    debug("Adressspeicher voll!");
 }
 
 uint8_t PhilipsLampLib::countLamps() {

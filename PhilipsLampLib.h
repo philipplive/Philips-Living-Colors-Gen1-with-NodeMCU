@@ -4,9 +4,9 @@
 #include <SPI.h>
 #include <SoftwareSerial.h>
 
-#define CC2500_CMD_SIDLE 0x36  // Exit RX / TX, turn off frequency synthesizer
+#define CC2500_CMD_SIDLE 0x36  // Exit RX / TX, Frequency Synthesizer abschalten
 #define SPI_CS 15 // Pin für CS
-#define MAX_LAMPS 10 // Maximale anzahl Lampen
+#define MAX_LAMPS 10 // Maximale Anzahl Lampen
 
 #define CMD_SET_COLOR 3
 #define CMD_ON 5
@@ -29,7 +29,7 @@ class PhilipsLampLib {
     void reset();
 
     /**
-  Suche X-Sekunden nach Sendersignalen und speichere die Empfangsadressen
+  Suche X Sekunden nach Sendersignalen und speichere die Empfangsadressen
   @param duration Anzahl Durchläufe (je ca. 50ms)
   @return Wurden Lampen gefunden?
   */
@@ -38,7 +38,7 @@ class PhilipsLampLib {
     bool addLamp(uint8_t *address);
 
     /**
-  @return Wieviele Lampen sind aktuell registriert?
+  @return Wie viele Lampen sind aktuell registriert?
   */
     uint8_t countLamps();
     void sendStrobe(byte strobe);
@@ -48,7 +48,7 @@ class PhilipsLampLib {
     /**
   Suche X-Sekunden nach Paketen
   @param duration Anzahl Durchläufe (je 100ms)
-  @param callback Callback welcher bei einem empfangenen Paket aufgerufen
+  @param callback Callback, welcher bei einem empfangenen Paket aufgerufen wird
   wird
   */
     void listening(uint8_t duration, std::function<void(uint8_t *)> callback);

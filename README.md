@@ -2,12 +2,12 @@
 <img src="./doc/header1.jpg"/>
 
 ## Programmablauf
-Das Programm dient dazu, die Lampen, welche an einer geschalteten Steckdose angeschlossen sind, nach einem stromlosen Zustand, automatisch einzuschalten (diese müssen ansonsten via Fernbedienung Manuell eingeschaltet werden).
+Das Programm dient dazu, die Lampen, welche an einer geschalteten Steckdose angeschlossen sind, nach einem stromlosen Zustand automatisch einzuschalten (diese müssen ansonsten via Fernbedienung manuell eingeschaltet werden).
 ### Start
-In den ersten X Sekunden (ca. 7) booten die Lampen (einmaliger RGB Durchlauf) und können keine Signale empfangen. Diese Zeit nutze ich daher und suche nach Signalen einer Fernbedienung. Falls gefunden, werden diese als neue Lampen im EEPROM abgelegt. Falls nichts gefunden wurde, werden bekannte Lampen aus dem EEPROM geladen.
+In den ersten X Sekunden (ca. 7) booten die Lampen (einmaliger RGB-Durchlauf) und können keine Signale empfangen. Diese Zeit nutze ich daher, um nach Signalen einer Fernbedienung zu suchen. Falls welche gefunden werden, werden diese als neue Lampen im EEPROM abgelegt. Falls nichts gefunden wurde, werden bekannte Lampen aus dem EEPROM geladen.
 ### Loop
-Grundsätzlich passiert hier nichts mehr. Wird jedoch ein Sendersignal empfangen, so wird dies als neue Default-Farbe gespeichert welche beim Start geladen wird.
-Ein Taster ermöglicht zudem ein manuelles setzen der Farbe (pro Tastendruck wird der H-Wert um jeweils ca. 28° rotiert).
+Grundsätzlich passiert hier nichts mehr. Wird jedoch ein Sendersignal empfangen, so wird dies als neue Default-Farbe gespeichert, welche beim Start geladen wird.
+Ein Taster ermöglicht zudem ein manuelles Setzen der Farbe (pro Tastendruck wird der H-Wert um jeweils ca. 28° rotiert).
 
 ## Materialliste
 * NodeMCU (v0.9) (ESP8266)
@@ -35,7 +35,7 @@ Die gesendeten Blöcke sind immer 17 Byte lang, wobei die ersten 15 notwendig sc
 | 14  | Wert S  |
 | 15  | Wert V  |
 
-* Die Adresse ist offenbar 8 Byte lang (da die letzten 4 Byte immer identisch sind, nehme ich an, dies ist die Absenderadresse, also die Adresse der Fernbedienung)
+* Die Adresse ist offenbar 8 Byte lang (da die letzten 4 Byte immer identisch sind, nehme ich an, dies ist die Absenderadresse, also die Adresse der Fernbedienung).
 
 Befehle: 
 | Wert  | Befehl |
@@ -52,9 +52,9 @@ PhilipsLampLib plc;
 // Suche X Durchläufe nach Sendersignalen und speichere diese als Lampen
 plc.searchLamps();
 
-// Einmal nach Packet suchen. Im Erfolgsfall die Methode aufrufen und das Packet als Datensatz übergeben
+// Einmal nach Paket suchen. Im Erfolgsfall die Methode aufrufen und das Paket als Datensatz übergeben
 plc.listening(1, [](uint8_t* data) {
-        // Packetaufbau siehe "Protokol"
+        // Paketaufbau siehe "Protokoll"
         hsv[0] = data[12];
         hsv[1] = data[13];
         hsv[2] = data[14];
